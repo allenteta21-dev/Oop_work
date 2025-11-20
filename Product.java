@@ -1,38 +1,15 @@
-package ID_27409.Q1;
+package ID_27409.Q4;
 
 class Product extends Supplier {
     private String productName;
     private double unitPrice;
-    private int stockLimit;
-
-    public Product(int id, String createdDate, String updatedDate, String warehouseName, String location, String phone, String categoryName, String categoryCode, String supplierName, String supplierEmail, String supplierPhone, String productName, double unitPrice, int stockLimit) {
-        super(id, createdDate, updatedDate, warehouseName, location, phone, categoryName, categoryCode, supplierName, supplierEmail, supplierPhone);
-        if (productName == null || productName.trim().isEmpty()) {
-            productName = "Unnamed Product";
-        }
-        if (unitPrice <= 0) {
-            unitPrice = 1.0;
-        }
-        if (stockLimit < 0) {
-            stockLimit = 0;
-        }
-        this.productName = productName;
-        this.unitPrice = unitPrice;
-        this.stockLimit = stockLimit;
+    private int quantity;
+    public Product(int id, String cd, String ud, String orgName, String orgCode, String address, String contactEmail, String deptName, String deptCode, String supplierName, String supplierTIN, String contact, String productName, double unitPrice, int quantity) {
+        super(id, cd, ud, orgName, orgCode, address, contactEmail, deptName, deptCode, supplierName, supplierTIN, contact);
+        this.productName = (productName == null || productName.isBlank()) ? "Product" : productName;
+        this.unitPrice = unitPrice > 0 ? unitPrice : 0.0;
+        this.quantity = quantity >= 0 ? quantity : 0;
     }
-
-    public String getProductName() {
-        return productName;
-    }
-    public double getUnitPrice() {
-        return unitPrice;
-    }
-    public int getStockLimit() {
-        return stockLimit;
-    }
-
-    public void display() {
-        System.out.println("Product: name=" + productName + ", unitPrice=" + unitPrice + ", stockLimit=" + stockLimit);
-    }
+    public double lineTotal() { return unitPrice * quantity; }
+    public void display() { System.out.println("Product: " + productName + " unitPrice=" + unitPrice + " qty=" + quantity + " lineTotal=" + lineTotal()); }
 }
-
