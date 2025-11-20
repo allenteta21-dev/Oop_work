@@ -1,220 +1,146 @@
-package ID_27409.Q1;
+package ID_27409.Q2;
 
 import java.util.Scanner;
-
-
 public class Main {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
 
-        System.out.println("STOCK MANAGEMENT SYSTEM");
-        System.out.println("ENTITY");
-        System.out.print("Please enter id: ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
-        if (id <= 0) {
-            System.out.println("Invalid id! Must be above zero");
-        }
-        System.out.print("Enter createdDate egs: 2025-11-19): ");
-        String createdDate = scanner.nextLine();
-        if (createdDate == null || createdDate.trim().isEmpty()) {
-            System.out.println("Invalid createdDate, set to 1970-01-01");
-            createdDate = "1970-01-01";
-        }
-        System.out.print("Enter updatedDate: ");
-        String updatedDate = scanner.nextLine();
-        if (updatedDate == null || updatedDate.trim().isEmpty()) {
-            System.out.println("Invalid updatedDate, set to 1970-01-01");
-            updatedDate = "1970-01-01";
-        }
-        Entity e = new Entity(id, createdDate, updatedDate);
+        System.out.println("=== FLIGHT BOOKING (Q2) ===");
 
-        System.out.println("\nWAREHOUSE");
-        System.out.print("warehouseName: ");
-        String warehouseName = scanner.nextLine();
-        if (warehouseName.trim().isEmpty()) {
-            System.out.println("Invalid warehouseName, set to Default Warehouse");
-            warehouseName = "Default Warehouse";
-        }
+        System.out.print("id (int > 0): ");
+        int id = readInt(sc);
+        System.out.print("createdDate (yyyy-mm-dd): ");
+        String createdDate = readNonEmpty(sc, "1970-01-01");
+        System.out.print("updatedDate (yyyy-mm-dd): ");
+        String updatedDate = readNonEmpty(sc, "1970-01-01");
+
+        System.out.println("\n--- AIRPORT ---");
+        System.out.print("airportName: ");
+        String airportName = readNonEmpty(sc, "Unknown Airport");
+        System.out.print("airport code (3 uppercase letters): ");
+        String airportCode = sc.nextLine().trim();
+        if (!airportCode.matches("[A-Z]{3}")) airportCode = "XXX";
         System.out.print("location: ");
-        String location = scanner.nextLine();
-        if (location.trim().isEmpty()) {
-            location = "Unknown";
-        }
-        System.out.print("phone (10 digits): ");
-        String phone = scanner.nextLine();
-        if (!phone.matches("\\d{10}")) {
-            System.out.println("Invalid phone, set to 0000000000");
-            phone = "0000000000";
-        }
-        Warehouse w = new Warehouse(id, createdDate, updatedDate, warehouseName, location, phone);
+        String location = readNonEmpty(sc, "Unknown");
 
-        System.out.println("\n=== CATEGORY ===");
-        System.out.print("categoryName: ");
-        String categoryName = scanner.nextLine();
-        if (categoryName.trim().isEmpty()) {
-            categoryName = "General";
-        }
-        System.out.print("categoryCode (>=3 alphanumeric): ");
-        String categoryCode = scanner.nextLine();
-        if (!categoryCode.matches("[A-Za-z0-9]{3,}")) {
-            System.out.println("Invalid code, set to CAT001");
-            categoryCode = "CAT001";
-        }
-        Category c = new Category(id, createdDate, updatedDate, warehouseName, location, phone, categoryName, categoryCode);
+        System.out.println("\n--- AIRLINE ---");
+        System.out.print("airlineName: ");
+        String airlineName = readNonEmpty(sc, "UnknownAir");
+        System.out.print("airlineCode (2-4 letters): ");
+        String airlineCode = sc.nextLine().trim();
+        if (!airlineCode.matches("[A-Za-z]{2,4}")) airlineCode = "AA";
+        System.out.print("contactEmail: ");
+        String contactEmail = sc.nextLine().trim();
+        if (!contactEmail.contains("@")) contactEmail = "contact@airline.com";
 
-        System.out.println("\n=== SUPPLIER ===");
-        System.out.print("supplierName: ");
-        String supplierName = scanner.nextLine();
-        if (supplierName.trim().isEmpty()) {
-            supplierName = "Unknown Supplier";
-        }
-        System.out.print("supplierEmail: ");
-        String supplierEmail = scanner.nextLine();
-        if (!supplierEmail.contains("@")) {
-            System.out.println("Invalid email, set to unknown@supplier.com");
-            supplierEmail = "unknown@supplier.com";
-        }
-        System.out.print("supplierPhone (10 digits): ");
-        String supplierPhone = scanner.nextLine();
-        if (!supplierPhone.matches("\\d{10}")) {
-            System.out.println("Invalid supplier phone, set to 0000000000");
-            supplierPhone = "0000000000";
-        }
-        Supplier s = new Supplier(id, createdDate, updatedDate, warehouseName, location, phone, categoryName, categoryCode, supplierName, supplierEmail, supplierPhone);
+        System.out.println("\n--- FLIGHT ---");
+        System.out.print("flightNumber: ");
+        String flightNumber = readNonEmpty(sc, "FN000");
+        System.out.print("departure: ");
+        String departure = readNonEmpty(sc, "Unknown");
+        System.out.print("destination: ");
+        String destination = readNonEmpty(sc, "Unknown");
+        System.out.print("baseFare (>0): ");
+        double baseFare = readDouble(sc);
+        if (baseFare <= 0) baseFare = 100.0;
 
-        System.out.println("\n=== PRODUCT ===");
-        System.out.print("productName: ");
-        String productName = scanner.nextLine();
-        if (productName.trim().isEmpty()) {
-            productName = "Unnamed Product";
-        }
-        System.out.print("unitPrice (>0): ");
-        double unitPrice = readDouble(scanner);
-        if (unitPrice <= 0) {
-            System.out.println("Invalid price, set to 1.0");
-            unitPrice = 1.0;
-        }
-        System.out.print("stockLimit (>=0): ");
-        int stockLimit = readInt(scanner);
-        if (stockLimit < 0) {
-            System.out.println("Invalid stockLimit, set to 0");
-            stockLimit = 0;
-        }
-        Product p = new Product(id, createdDate, updatedDate, warehouseName, location, phone, categoryName, categoryCode, supplierName, supplierEmail, supplierPhone, productName, unitPrice, stockLimit);
+        System.out.println("\n--- PILOT ---");
+        System.out.print("pilotName: ");
+        String pilotName = readNonEmpty(sc, "Captain");
+        System.out.print("licenseNumber: ");
+        String licenseNumber = readNonEmpty(sc, "LIC000");
+        System.out.print("experienceYears (>=2): ");
+        int experienceYears = readInt(sc);
+        if (experienceYears < 2) experienceYears = 2;
 
-        System.out.println("\n=== STOCK ITEM ===");
-        System.out.print("quantityAvailable (>=0): ");
-        int quantityAvailable = readInt(scanner);
-        if (quantityAvailable < 0) {
-            System.out.println("Invalid quantity, set to 0");
-            quantityAvailable = 0;
-        }
-        System.out.print("reorderLevel (>=0): ");
-        int reorderLevel = readInt(scanner);
-        if (reorderLevel < 0) {
-            reorderLevel = 0;
-        }
-        StockItem si = new StockItem(id, createdDate, updatedDate, warehouseName, location, phone, categoryName, categoryCode, supplierName, supplierEmail, supplierPhone, productName, unitPrice, stockLimit, quantityAvailable, reorderLevel);
+        System.out.println("\n--- CABIN CREW ---");
+        System.out.print("crewName: ");
+        String crewName = readNonEmpty(sc, "Crew");
+        System.out.print("role: ");
+        String role = readNonEmpty(sc, "Attendant");
+        System.out.print("shift (Day/Night): ");
+        String shift = sc.nextLine().trim();
+        if (!("Day".equalsIgnoreCase(shift) || "Night".equalsIgnoreCase(shift))) shift = "Day";
 
-        System.out.println("\n=== PURCHASE ===");
-        System.out.print("purchaseDate: ");
-        String purchaseDate = scanner.nextLine();
-        if (purchaseDate.trim().isEmpty()) {
-            purchaseDate = "1970-01-01";
-        }
-        System.out.print("purchasedQuantity (>0): ");
-        int purchasedQuantity = readInt(scanner);
-        if (purchasedQuantity <= 0) {
-            System.out.println("Invalid purchased quantity, set to 1");
-            purchasedQuantity = 1;
-        }
-        Purchase pur = new Purchase(id, createdDate, updatedDate, warehouseName, location, phone, categoryName, categoryCode, supplierName, supplierEmail, supplierPhone, productName, unitPrice, stockLimit, quantityAvailable, reorderLevel, purchaseDate, purchasedQuantity, supplierName);
+        System.out.println("\n--- PASSENGER ---");
+        System.out.print("passengerName: ");
+        String passengerName = readNonEmpty(sc, "Passenger");
+        System.out.print("age (>0): ");
+        int age = readInt(sc);
+        if (age <= 0) age = 1;
+        System.out.print("gender (M/F/Other): ");
+        String gender = sc.nextLine().trim();
+        if (gender.isEmpty()) gender = "Other";
+        System.out.print("contact: ");
+        String contact = sc.nextLine().trim();
 
-        System.out.println("\n=== SALE ===");
-        System.out.print("saleDate: ");
-        String saleDate = scanner.nextLine();
-        if (saleDate.trim().isEmpty()) {
-            saleDate = "1970-01-01";
-        }
-        System.out.print("soldQuantity (>0): ");
-        int soldQuantity = readInt(scanner);
-        if (soldQuantity <= 0) {
-            System.out.println("Invalid sold quantity, set to 0");
-            soldQuantity = 0;
-        }
-        System.out.print("customerName: ");
-        String customerName = scanner.nextLine();
-        if (customerName.trim().isEmpty()) {
-            customerName = "Anonymous";
-        }
-        Sale sale = new Sale(id, createdDate, updatedDate, warehouseName, location, phone, categoryName, categoryCode, supplierName, supplierEmail, supplierPhone, productName, unitPrice, stockLimit, quantityAvailable + purchasedQuantity, reorderLevel, purchaseDate, purchasedQuantity, supplierName, saleDate, soldQuantity, customerName);
+        System.out.println("\n--- BOOKING ---");
+        System.out.print("bookingDate: ");
+        String bookingDate = readNonEmpty(sc, "1970-01-01");
+        System.out.print("seatNumber: ");
+        String seatNumber = readNonEmpty(sc, "0A");
+        System.out.print("travelClass (Economy/Business/First): ");
+        String travelClass = sc.nextLine().trim();
+        if (!(travelClass.equalsIgnoreCase("Economy") || travelClass.equalsIgnoreCase("Business") || travelClass.equalsIgnoreCase("First"))) travelClass = "Economy";
 
-        // update stock
-        int finalQty = si.getQuantityAvailable() + purchasedQuantity - soldQuantity;
-        if (finalQty < 0) {
-            finalQty = 0;
-        }
+        System.out.println("\n--- PAYMENT ---");
+        System.out.print("paymentDate: ");
+        String paymentDate = readNonEmpty(sc, "1970-01-01");
+        System.out.print("paymentMethod: ");
+        String paymentMethod = readNonEmpty(sc, "Card");
+        System.out.print("amountPaid (>0): ");
+        double amountPaid = readDouble(sc);
+        if (amountPaid <= 0) amountPaid = 0.0;
 
-        System.out.println("\n=== INVENTORY ===");
-        int totalItems = finalQty;
-        double stockValue = totalItems * unitPrice;
-        Inventory inv = new Inventory(id, createdDate, updatedDate, warehouseName, location, phone, categoryName, categoryCode, supplierName, supplierEmail, supplierPhone, productName, unitPrice, stockLimit, finalQty, reorderLevel, totalItems, stockValue);
+        System.out.println("\n--- TICKET ---");
+        System.out.print("ticketNumber: ");
+        String ticketNumber = readNonEmpty(sc, "TCKT000");
+        System.out.print("issueDate: ");
+        String issueDate = readNonEmpty(sc, "1970-01-01");
 
-        System.out.println("\n=== STOCK REPORT ===");
-        System.out.print("reportDate: ");
-        String reportDate = scanner.nextLine();
-        if (reportDate.trim().isEmpty()) {
-            reportDate = "1970-01-01";
-        }
-        System.out.print("remarks: ");
-        String remarks = scanner.nextLine();
-        StockReport report = new StockReport(id, createdDate, updatedDate, warehouseName, location, phone, categoryName, categoryCode, supplierName, supplierEmail, supplierPhone, productName, unitPrice, stockLimit, finalQty, reorderLevel, totalItems, stockValue, reportDate, remarks);
+        // instantiate chain
+        Airport airport = new Airport(id, createdDate, updatedDate, airportName, airportCode, location);
+        Airline airline = new Airline(id, createdDate, updatedDate, airportName, airportCode, location, airlineName, airlineCode, contactEmail);
+        Flight flight = new Flight(id, createdDate, updatedDate, airportName, airportCode, location, airlineName, airlineCode, contactEmail, flightNumber, departure, destination, baseFare);
+        Pilot pilot = new Pilot(id, createdDate, updatedDate, airportName, airportCode, location, airlineName, airlineCode, contactEmail, flightNumber, departure, destination, baseFare, pilotName, licenseNumber, experienceYears);
+        CabinCrew crew = new CabinCrew(id, createdDate, updatedDate, airportName, airportCode, location, airlineName, airlineCode, contactEmail, flightNumber, departure, destination, baseFare, pilotName, licenseNumber, experienceYears, crewName, role, shift);
+        Passenger passenger = new Passenger(id, createdDate, updatedDate, airportName, airportCode, location, airlineName, airlineCode, contactEmail, flightNumber, departure, destination, baseFare, pilotName, licenseNumber, experienceYears, crewName, role, shift, passengerName, age, gender, contact);
+        Booking booking = new Booking(id, createdDate, updatedDate, airportName, airportCode, location, airlineName, airlineCode, contactEmail, flightNumber, departure, destination, baseFare, pilotName, licenseNumber, experienceYears, crewName, role, shift, passengerName, age, gender, contact, bookingDate, seatNumber, travelClass);
+        Payment payment = new Payment(id, createdDate, updatedDate, airportName, airportCode, location, airlineName, airlineCode, contactEmail, flightNumber, departure, destination, baseFare, pilotName, licenseNumber, experienceYears, crewName, role, shift, passengerName, age, gender, contact, bookingDate, seatNumber, travelClass, paymentDate, paymentMethod, amountPaid);
+        Ticket ticket = new Ticket(id, createdDate, updatedDate, airportName, airportCode, location, airlineName, airlineCode, contactEmail, flightNumber, departure, destination, baseFare, pilotName, licenseNumber, experienceYears, crewName, role, shift, passengerName, age, gender, contact, bookingDate, seatNumber, travelClass, paymentDate, paymentMethod, amountPaid, ticketNumber, issueDate);
 
-        // display all
-        System.out.println("\n--- DISPLAY ALL DATA (QUESTION 1) ---");
-        e.display();
-        w.display();
-        c.display();
-        s.display();
-        p.display();
-        si.setQuantityAvailable(finalQty);
-        si.display();
-        pur.display();
-        sale.display();
-        inv.display();
-        report.generateReport();
+        // display inputs and computed fare
+        System.out.println("\n--- DISPLAY DATA (Q2) ---");
+        airport.display();
+        airline.display();
+        flight.display();
+        pilot.display();
+        crew.display();
+        passenger.display();
+        booking.display();
+        payment.display();
+        ticket.display();
 
-        scanner.close();
+        System.out.printf("Calculated Fare: %.2f%n", ticket.calculateFare());
+
+        sc.close();
     }
 
-    public static int readInt(Scanner scanner) {
-        int v = 0;
-        boolean ok = false;
-        while (!ok) {
-            String line = scanner.nextLine();
-            try {
-                v = Integer.parseInt(line);
-                ok = true;
-            } catch (Exception ex) {
-                System.out.print("Invalid number, enter again: ");
-            }
+    private static int readInt(Scanner sc) {
+        while (true) {
+            String s = sc.nextLine().trim();
+            try { return Integer.parseInt(s); } catch (Exception e) { System.out.print("Enter a valid integer: "); }
         }
-        return v;
     }
-
-    public static double readDouble(Scanner scanner) {
-        double v = 0;
-        boolean ok = false;
-        while (!ok) {
-            String line = scanner.nextLine();
-            try {
-                v = Double.parseDouble(line);
-                ok = true;
-            } catch (Exception ex) {
-                System.out.print("Invalid number, enter again: ");
-            }
+    private static double readDouble(Scanner sc) {
+        while (true) {
+            String s = sc.nextLine().trim();
+            try { return Double.parseDouble(s); } catch (Exception e) { System.out.print("Enter a valid number: "); }
         }
-        return v;
+    }
+    private static String readNonEmpty(Scanner sc, String def) {
+        String s = sc.nextLine().trim();
+        return s.isEmpty() ? def : s;
     }
 }
+
