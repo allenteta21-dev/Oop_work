@@ -1,4 +1,4 @@
-package ID_27409.Q5;
+package ID_27409.Q6;
 
 class Entity {
     private int id;
@@ -14,6 +14,5 @@ class Entity {
     public int getId() { return id; }
     public String getCreatedDate() { return createdDate; }
     public String getUpdatedDate() { return updatedDate; }
-
     public void display() { System.out.println("Entity id=" + id + " created=" + createdDate + " updated=" + updatedDate); }
 }
